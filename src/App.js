@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import './App.css';
 
 import Form from './components/Form';
@@ -13,15 +14,18 @@ function App() {
 
   // This function runs only once when app is mounted in DOM
   useEffect(() => {
-    const getLocalTodos = () => {
-      if (localStorage.getItem('todos') === null) {
-        localStorage.setItem('todos', JSON.stringify([]));
-      } else {
-        let todoLocal = JSON.parse(localStorage.getItem('todos'));
-        setTodos(todoLocal);
+    async function fetchTodos() {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_BASE_URL}/api/todos`
+        );
+        setTodos(response.data.data);
+      } catch (err) {
+        console.log(err.message);
       }
-    };
-    getLocalTodos();
+    }
+
+    fetchTodos();
   }, []);
 
   // This effect runs when there is state changes in : Todos and Status
@@ -41,11 +45,11 @@ function App() {
     filterHandler();
 
     //Saving data in local Storage
-    const saveLocalTodos = () => {
-      localStorage.setItem('todos', JSON.stringify(todos));
-    };
+   //  const saveLocalTodos = () => {
+   //    localStorage.setItem('todos', JSON.stringify(todos));
+   //  };
 
-    saveLocalTodos();
+   //  saveLocalTodos();
   }, [status, todos]);
 
   return (
