@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 const Form = ({ inputText, setInputText, todos, setTodos, setStatus }) => {
   // Get Input value from input text and set it to state
@@ -6,19 +7,19 @@ const Form = ({ inputText, setInputText, todos, setTodos, setStatus }) => {
     setInputText(e.target.value);
   };
   // form submit handler
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
     if (inputText === '') {
       setInputText();
     } else {
-      setTodos([
-        ...todos,
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_BASE_URL}/api/todos`,
         {
-          text: inputText,
-          isCompleted: false,
-          id: Math.random() * 1000,
-        },
-      ]);
+          task: inputText,
+        }
+      );
+      const newTask = response.data.data
+      setTodos([...todos, newTask]);
     }
     setInputText('');
   };
