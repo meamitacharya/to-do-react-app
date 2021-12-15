@@ -43,13 +43,6 @@ function App() {
       }
     };
     filterHandler();
-
-    //Saving data in local Storage
-   //  const saveLocalTodos = () => {
-   //    localStorage.setItem('todos', JSON.stringify(todos));
-   //  };
-
-   //  saveLocalTodos();
   }, [status, todos]);
 
   return (
